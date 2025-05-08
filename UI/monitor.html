@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>산사태 감지 시각화</title>
+  <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      margin: 0;
+      background-color: #f0f0f0;
+      overflow-y: auto; /* 💡 스크롤 가능하도록 */
+    }
+    header {
+      background-color: #263238;
+      color: white;
+      text-align: center;
+      padding: 12px 0;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .container {
+      display: flex;
+      flex-direction: row;
+      min-height: 100vh;  /* 💡 높이 고정 대신 최소 높이 설정 */
+    }
+    .panel {
+      flex: 1;
+      border-right: 1px solid #ccc;
+      padding: 10px;
+      box-sizing: border-box;
+      background-color: #fff;
+      overflow-y: auto;  /* 💡 패널 내 개별 스크롤 가능 */
+    }
+    .panel:last-child {
+      border-right: none;
+    }
+    h2 {
+      font-size: 18px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 5px;
+    }
+    canvas, img {
+      width: 100%;
+      height: auto;
+    }
+    .subsection {
+      margin-top: 10px;
+    }
+    .subsection h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+      border-bottom: 1px dashed #ccc;
+      padding-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+  <header>산사태 감지 시스템</header>
+  <div class="container">
+
+    <!-- 좌측: 센서 파형 -->
+    <div class="panel">
+      <h2>센서 파형</h2>
+      <canvas id="accelChart"></canvas>
+      <canvas id="gyroChart"></canvas>
+      <canvas id="pitchChart"></canvas>
+      <canvas id="rollChart"></canvas>
+      <canvas id="moistureChart"></canvas>
+      <canvas id="tempChart"></canvas>
+    </div>
+
+    <!-- 중앙: 위험도 분석 -->
+    <div class="panel">
+      <h2>위험도 분석</h2>
+      <!-- 추후 위험도 판단 관련 시각화 내용 삽입 -->
+    </div>
+
+    <!-- 우측: 국내 산사태 위험지역 -->
+    <div class="panel">
+      <h2>국내 산사태 위험지역</h2>
+      <!-- 추후 산사태 위험지도 삽입 및 CCTV 보러가는 버튼 추가 예정 -->
+      <!-- folium 지도 iframe 삽입 -->
+      <iframe src="/static/folium_risk_map.html" width="100%" height="300px" style="border:1px solid #ccc;"></iframe>
+
+      <div class="subsection">
+        <h3>주변 CCTV 보기 (예정)</h3>
+          <!-- CCTV 관련 콘텐츠 삽입 예정 -->
+          <button onclick="loadCCTV()">📹 디바이스 1</button>
+          <iframe id="cctv_frame" width="100%" height="240px" style="margin-top:10px; border:1px solid #aaa;"></iframe>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/static/chart.js"></script>  
+  <script src="/static/cctv.js"></script>
+</body>
+</html>
