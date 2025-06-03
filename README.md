@@ -14,19 +14,23 @@ LoRa 통신을 통해 원거리에서 수집한 데이터를 서버로 전송하
 
 ## 🧩 시스템 구성도
 
-- **센서 노드 (Arduino Uno)**
+- **센서 노드 (Arduino nano)**
   - 기울기 센서: `MPU6050`
   - 진동 센서: `Grove - Piezo Vibration Sensor`
   - 토양 수분 센서: `Grove - Capacitive Soil Moisture Sensor`
   - 지온 센서: `Grove - DS18B20`
-  - GPS 모듈: `Grove - GPS (Air530)`
+  - GPS 모듈: `GPS GY-NEO6MV2`
   - 통신: `LoRa (REYAX RYLR998)`
 
-- **수신 게이트웨이 (랩탑 or Raspberry Pi)**
+- **수신 랩탑 (P2P)**
   - Flask 기반 웹 서버
   - SQLite3 DB 저장
   - 실시간 지도 시각화 (HTML + JS)
 
+---
+### 🖼️ 디바이스 구성도
+
+![디바이스 구성도](https://private-user-images.githubusercontent.com/138554661/450804851-ac6a0688-be6d-4f27-ae64-e7569bbd490e.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDg5NTYzMDMsIm5iZiI6MTc0ODk1NjAwMywicGF0aCI6Ii8xMzg1NTQ2NjEvNDUwODA0ODUxLWFjNmEwNjg4LWJlNmQtNGYyNy1hZTY0LWU3NTY5YmJkNDkwZS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwNjAzJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDYwM1QxMzA2NDNaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1kMzhjNDhjMTZhMjQ1MTc1M2ViODZjMGU0M2QzZDVjZTgxOWVjY2I3ZGNiYzhhYjg4NWU4MDA1ZmM3MDZiZWQ0JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.qS7ZSr3Ng0nOaDmHkNUl39ENw3kez9X09KB5WIj1PS4)
 ---
 
 ## 📁 디렉토리 구조
@@ -40,7 +44,7 @@ LoRa 통신을 통해 원거리에서 수집한 데이터를 서버로 전송하
 - 🌐 **LoRa 기반 원거리 통신**
 - 📉 **센서 데이터 실시간 수신**
 - 🌡️ **환경 정보 시각화 (지도 기반)**
-- 🧠 **향후: 위험도 판단 알고리즘 + AI 모델 학습 데이터로 활용**
+- 🧠 **센서 데이터 기반 위험도 판단**
 
 ---
 
