@@ -172,3 +172,8 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+# Sensor logs
+*.csv
+*.json
+log/
+latest_data.json

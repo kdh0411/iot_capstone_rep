@@ -33,7 +33,7 @@ function createChart(ctxId, label, color, suggestedMin, suggestedMax) {
   });
 }
 
-window.onload = () => {
+document.addEventListener("DOMContentLoaded", () => {
   charts.accel = createChart('accelChart', '|A| (가속도)', 'red', 0.5, 1.5);
   charts.gyro = createChart('gyroChart', '|G| (자이로)', 'blue', 0, 20);
   charts.pitch = createChart('pitchChart', 'Pitch (°)', 'green', -90, 90);
@@ -42,20 +42,35 @@ window.onload = () => {
   charts.temp = createChart('tempChart', '지온 (℃)', 'brown', -10, 50);
 
   setInterval(fetchAndUpdate, 1000);
-};
+});
 
 function fetchAndUpdate() {
+  console.log("✅ fetchAndUpdate 실행됨");
   fetch('/sensor')
     .then(res => res.json())
     .then(data => {
+      if (!data || data.a === undefined || data.g === undefined || !Array.isArray(data.n)) {
+        console.warn("❗ 데이터 형식 오류", data);
+        return;
+      }
+
+      const sum = data.a + data.g + data.n[0] + data.n[1] + data.m + data.t;
+      if (sum === 0) {
+        console.warn("❗ 데이터가 모두 0임", data);
+        return;
+      }
+
       const now = new Date().toLocaleTimeString();
 
-      updateChart(charts.accel, now, data.A);
-      updateChart(charts.gyro, now, data.G);
-      updateChart(charts.pitch, now, data.N[0]);
-      updateChart(charts.roll, now, data.N[1]);
-      updateChart(charts.moisture, now, data.M);
-      updateChart(charts.temp, now, data.T);
+      updateChart(charts.accel, now, data.a);
+      updateChart(charts.gyro, now, data.g);
+      updateChart(charts.pitch, now, data.n[0]);
+      updateChart(charts.roll, now, data.n[1]);
+      updateChart(charts.moisture, now, data.m);
+      updateChart(charts.temp, now, data.t);
+    })
+    .catch(err => {
+      console.error("❌ /sensor fetch 실패", err);
     });
 }
 

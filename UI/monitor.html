@@ -8,8 +8,9 @@
       font-family: 'Noto Sans KR', sans-serif;
       margin: 0;
       background-color: #f0f0f0;
-      overflow-y: auto; /* 💡 스크롤 가능하도록 */
+      overflow-y: auto;
     }
+
     header {
       background-color: #263238;
       color: white;
@@ -18,39 +19,97 @@
       font-size: 24px;
       font-weight: bold;
     }
+
     .container {
       display: flex;
       flex-direction: row;
-      min-height: 100vh;  /* 💡 높이 고정 대신 최소 높이 설정 */
+      min-height: 100vh;
     }
-    .panel {
-      flex: 1;
-      border-right: 1px solid #ccc;
+
+    .left-panel-wrapper {
+      flex: 3;
       padding: 10px;
       box-sizing: border-box;
       background-color: #fff;
-      overflow-y: auto;  /* 💡 패널 내 개별 스크롤 가능 */
     }
-    .panel:last-child {
-      border-right: none;
+
+    .left-panel-wrapper h2 {
+      font-size: 18px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 5px;
+      margin-bottom: 10px;
     }
-    h2 {
+
+    .left-panel {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    .left-panel canvas {
+      width: 100%;
+      height: 100px;
+    }
+
+    .custom-section {
+      margin-top: 30px;
+      padding: 10px;
+      border-top: 1px dashed #ccc;
+      background-color: #fafafa;
+    }
+
+    .right-panel {
+      flex: 1;
+      padding: 10px;
+      box-sizing: border-box;
+      background-color: #fff;
+      border-left: 1px solid #ccc;
+      overflow-y: auto;
+    }
+
+    .right-panel h2 {
       font-size: 18px;
       border-bottom: 1px solid #ddd;
       padding-bottom: 5px;
     }
-    canvas, img {
+
+    iframe {
       width: 100%;
-      height: auto;
+      border: 1px solid #ccc;
     }
+
     .subsection {
-      margin-top: 10px;
+      margin-top: 20px;
     }
+
     .subsection h3 {
       font-size: 16px;
       margin-bottom: 8px;
       border-bottom: 1px dashed #ccc;
       padding-bottom: 4px;
+    }
+
+    button {
+      padding: 8px 12px;
+      font-size: 14px;
+      background-color: #3d8ddd;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .legend-horizontal {
+      font-size: 14px;
+      background-color: #f9f9f9;
+      padding: 8px 10px;
+      margin-top: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
     }
   </style>
 </head>
@@ -58,41 +117,122 @@
   <header>산사태 감지 시스템</header>
   <div class="container">
 
-    <!-- 좌측: 센서 파형 -->
-    <div class="panel">
+    <!-- 좌측: 센서 -->
+    <div class="left-panel-wrapper">
       <h2>센서 파형</h2>
-      <canvas id="accelChart"></canvas>
-      <canvas id="gyroChart"></canvas>
-      <canvas id="pitchChart"></canvas>
-      <canvas id="rollChart"></canvas>
-      <canvas id="moistureChart"></canvas>
-      <canvas id="tempChart"></canvas>
+      <div class="left-panel">
+        <div><canvas id="gyroChart"></canvas></div>
+        <div><canvas id="accelChart"></canvas></div>
+        <div><canvas id="pitchChart"></canvas></div>
+        <div><canvas id="moistureChart"></canvas></div>
+        <div><canvas id="tempChart"></canvas></div>
+        <div><canvas id="rollChart"></canvas></div>
+      </div>
+
+      <div class="custom-section" style="display: flex; flex-direction: row; gap: 30px; align-items: flex-start;">
+        <!-- 실시간 위험도 -->
+        <div style="min-width: 200px;">
+          <h3>실시간 위험도</h3>
+          <div id="riskDisplay">⏳ 데이터 수신 중...</div>
+          
+          <div id="riskStreak" style="margin-top: 8px; font-size: 14px; color: #b71c1c;"></div>
+
+          <div style="margin-top: 12px;">
+            <label style="font-size: 14px;">
+              <!--<input type="checkbox" id="riskAlert" style="margin-right: 6px;">
+              위험도 알림받기-->
+            </label>
+          </div>
+        </div>
+        
+        <!-- 위험도 해석 및 관리자 대응 -->
+        <div style="flex: 1;">
+          <h3>위험도 해석 및 관리자 대응</h3>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <!-- 좌측 열: 낮은~보통 -->
+            <ul style="font-size: 14px; line-height: 1.8; padding-left: 18px; margin: 0;">
+              <li><span style="color: blue;"><b>🟦 매우 낮음</b></span> — 디바이스가 수직 상태이며, 토양도 건조한 안정 상태입니다.<br>
+                <i>📌 조치: 정상 작동 여부만 주기적으로 확인</i>
+              </li>
+              <li><span style="color: green;"><b>🟩 낮음</b></span> — 수분감지가 시작되며 약간의 바람에 의한 흔들림이 있을 수 있습니다.<br>
+                <i>📌 조치: 기상 및 토양 상태 점검</i>
+              </li>
+              <li><span style="color: goldenrod;"><b>🟨 보통</b></span> — 수분이 상승하며 약간의 기울기 변화가 있을 수 있습니다.<br>
+                <i>📌 조치: 기기의 고정 상태를 주기적으로 확인</i>
+              </li>
+            </ul>
+      
+            <!-- 우측 열: 높음~매우 높음 -->
+            <ul style="font-size: 14px; line-height: 1.8; padding-left: 18px; margin: 0;">
+              <li><span style="color: orange;"><b>🟧 높음</b></span> — 기울기가 불안정할 수 있고 진동에 의한 떨림이 있을 수 있습니다.<br>
+                <i>📌 조치: 위험도 및 센서 파형 집중 모니터링</i>
+              </li>
+              <li><span style="color: red;"><b>🟥 매우 높음</b></span> — 수직이던 디바이스가 45도 이상 기울었을 수 있으며 산사태 가능성이 높습니다.<br>
+                <i>📌 조치: 이 등급이 계속 유지될 시 현장 점검을 고려하며, 안전 대피 계획을 준비</i>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- 중앙: 위험도 분석 -->
-    <div class="panel">
-      <h2>위험도 분석</h2>
-      <!-- 추후 위험도 판단 관련 시각화 내용 삽입 -->
-    </div>
+    <!-- 우측: 지도 + CCTV -->
+    <div class="right-panel">
+      <h2>2025년 국내 산사태 위험지역</h2>
+      <iframe src="/static/folium_risk_map.html" height="300px"></iframe>
 
-    <!-- 우측: 국내 산사태 위험지역 -->
-    <div class="panel">
-      <h2>국내 산사태 위험지역</h2>
-      <!-- 추후 산사태 위험지도 삽입 및 CCTV 보러가는 버튼 추가 예정 -->
-      <!-- folium 지도 iframe 삽입 -->
-      <iframe src="/static/folium_risk_map.html" width="100%" height="300px" style="border:1px solid #ccc;"></iframe>
+      <div class="legend-horizontal">
+        <span style="color: blue;">🟦 매우 낮음</span>
+        <span style="color: green;">🟩 낮음</span>
+        <span style="color: goldenrod;">🟨 보통</span>
+        <span style="color: orange;">🟧 높음</span>
+        <span style="color: red;">🟥 매우 높음</span>
+        <span>
+          <img src="/static/device_icon.png" alt="디바이스 마커" style="height: 20px; vertical-align: middle;">
+          디바이스
+        </span>
+      </div>
 
       <div class="subsection">
-        <h3>주변 CCTV 보기 (예정)</h3>
-          <!-- CCTV 관련 콘텐츠 삽입 예정 -->
-          <button onclick="loadCCTV()">📹 디바이스 1</button>
-          <iframe id="cctv_frame" width="100%" height="240px" style="margin-top:10px; border:1px solid #aaa;"></iframe>
+        <h3>디바이스 주변 CCTV</h3>
+        <iframe id="cctv_frame" height="240px" style="margin-top:10px;"></iframe>
+      </div>
     </div>
 
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="/static/chart.js"></script>  
+  <script src="/static/chart.js"></script>
   <script src="/static/cctv.js"></script>
+  <script src="/static/risk_monitor.js"></script>
+  <script>
+    async function updateRisk() {
+      try {
+        const response = await fetch('/risk', { cache: "no-cache" });
+        const data = await response.json();
+        const level = data.label;
+        const score = data.risk;
+
+        let labelText = "알 수 없음";
+        let color = "gray";
+
+        if (level === 0) { labelText = "매우 낮음"; color = "blue"; }
+        else if (level === 1) { labelText = "낮음"; color = "green"; }
+        else if (level === 2) { labelText = "보통"; color = "goldenrod"; }
+        else if (level === 3) { labelText = "높음"; color = "orange"; }
+        else if (level === 4) { labelText = "매우 높음"; color = "red"; }
+
+        document.getElementById("riskDisplay").innerHTML = `
+          🌡️ 위험도 점수: <b>${score.toFixed(2)}</b><br>
+          🛑 등급: <b style="color:${color};">${labelText}</b>
+        `;
+      } catch (e) {
+        document.getElementById("riskDisplay").textContent = "❌ 위험도 데이터 없음";
+      }
+    }
+
+    updateRisk();
+    setInterval(updateRisk, 2000);
+  </script>
 </body>
 </html>
