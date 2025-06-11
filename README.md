@@ -16,11 +16,12 @@ LoRa 통신을 통해 원거리에서 수집한 데이터를 서버로 전송하
 
 - **센서 노드 (Arduino nano)**
   - 기울기 센서: `MPU6050`
-  - 진동 센서: `Grove - Piezo Vibration Sensor`
-  - 토양 수분 센서: `Grove - Capacitive Soil Moisture Sensor`
-  - 지온 센서: `Grove - DS18B20`
+  - 진동 센서: `Piezo Vibration Sensor`
+  - 토양 수분 센서: ` Capacitive Soil Moisture Sensor Module`
+  - 지온 센서: ` DS18B20`
   - GPS 모듈: `GPS GY-NEO6MV2`
   - 통신: `LoRa (REYAX RYLR998)`
+  - 컨버터: 'CCA TXS0108E 8채널 양방향 TTL 전압 레벨컨버터
 
 - **수신 랩탑 (P2P)**
   - Flask 기반 웹 서버
