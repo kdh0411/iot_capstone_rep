@@ -32,7 +32,7 @@ LoRa 통신을 통해 원거리에서 수집한 데이터를 서버로 전송하
 
 ### 🖼️ 디바이스 구성도
 
-![디바이스 구성도](https://user-images.githubusercontent.com/138554661/450804851-ac6a0688-be6d-4f27-ae64-e7569bbd490e.png)
+![Device](https://github.com/user-attachments/assets/412e1dd0-2e5d-466d-84d0-8169155c5251)
 
 ---
 
