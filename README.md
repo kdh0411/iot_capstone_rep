@@ -29,6 +29,7 @@ LoRa 통신을 통해 원거리에서 수집한 데이터를 서버로 전송하
   - 실시간 지도 시각화 (HTML + JS)
 
 ---
+
 ### 🖼️ 디바이스 구성도
 
 ![디바이스 구성도](https://user-images.githubusercontent.com/138554661/450804851-ac6a0688-be6d-4f27-ae64-e7569bbd490e.png)
